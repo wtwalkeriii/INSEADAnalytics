@@ -285,28 +285,71 @@ print(m1,'chart')
 
 **Your Answers here:**
 <br>
-1. 6
-2. 0.93
-3. The components are as follows:
-Government Debt
-Currency and precious Metals
-European Stock Indicies
-US Stock Indicies
-European Fixed Income Futures
-Oil
-Metals
-Agricultural Commodities
-Asian Stock Indicies
-4.
-Variance_Explained_Table_results <- PCA(futures_data, graph = FALSE)
-Variance_Explained_Table <- cbind(paste("component", 1:ncol(futures_data), sep = " "), 
-    Variance_Explained_Table_results$eig)
-Variance_Explained_Table <- as.data.frame(Variance_Explained_Table)
-colnames(Variance_Explained_Table) <- c("Component", "Eigenvalue", "Percentage_of_explained_variance", 
-    "Cumulative_percentage_of_explained_variance")
+1. 6<br>
+2. 0.93<br>
+3. The components are as follows:<br>
+Government Debt<br>
+Currency and precious Metals<br>
+European Stock Indicies<br>
+US Stock Indicies<br>
+European Fixed Income Futures<br>
+Oil<br>
+Metals<br>
+Agricultural Commodities<br>
+Asian Stock Indicies<br>
+4. Pre-crisis bull market
+```{r echo=TRUE, eval=TRUE, comment=NA, warning=FALSE,error=FALSE, message=FALSE, prompt=FALSE, tidy=TRUE}
+bull_data = futures_data[as.Date(rownames(futures_data)) > "2002-11-01" & as.Date(rownames(futures_data)) < "2007-10-01", ]
+Variance_Explained_Table_results<-PCA(bull_data, graph=FALSE)
+Variance_Explained_Table<-cbind(paste("component",1:ncol(bull_data),sep=" "),Variance_Explained_Table_results$eig)
+Variance_Explained_Table<-as.data.frame(Variance_Explained_Table)
+colnames(Variance_Explained_Table)<-c("Component","Eigenvalue", "Percentage_of_explained_variance", "Cumulative_percentage_of_explained_variance")
+```
+
+```{r}
+show_data_bull = data.frame(Variance_Explained_Table)
+m1<-gvisTable(show_data,options=list(width=1920, height=min(400,27*(nrow(show_data)+1)),allowHTML=TRUE,page='disable'),formats=list(Eigenvalue="#.##",Percentage_of_explained_variance="#.##",Cumulative_percentage_of_explained_variance="#.##"))
+print(m1,'chart')
+```
+
+```{r}
+eigenvalues  <- Variance_Explained_Table[,2]
+```
+
+```{r}
+df           <- cbind(as.data.frame(eigenvalues), c(1:length(eigenvalues)), rep(1, length(eigenvalues)))
+colnames(df) <- c("eigenvalues", "components", "abline")
+Line         <- gvisLineChart(as.data.frame(df), xvar="components", yvar=c("eigenvalues","abline"), options=list(title='Scree plot', legend="right", width=900, height=600, hAxis="{title:'Number of Components', titleTextStyle:{color:'black'}}", vAxes="[{title:'Eigenvalues'}]",  series="[{color:'green',pointSize:3, targetAxisIndex: 0}]"))
+print(Line, 'chart')
+```
+
+<br>Crisis years
+```{r}
+crisis_data = futures_data[as.Date(rownames(futures_data)) > "2007-10-01" & as.Date(rownames(futures_data)) < "2009-03-01", ]
+Variance_Explained_Table_results<-PCA(crisis_data, graph=FALSE)
+Variance_Explained_Table<-cbind(paste("component",1:ncol(crisis_data),sep=" "),Variance_Explained_Table_results$eig)
+Variance_Explained_Table<-as.data.frame(Variance_Explained_Table)
+colnames(Variance_Explained_Table)<-c("Component","Eigenvalue", "Percentage_of_explained_variance", "Cumulative_percentage_of_explained_variance")
+```
+
+```{r}
+show_crisis_data = data.frame(Variance_Explained_Table)
+m1<-gvisTable(show_data,options=list(width=1920, height=min(400,27*(nrow(show_data)+1)),allowHTML=TRUE,page='disable'),formats=list(Eigenvalue="#.##",Percentage_of_explained_variance="#.##",Cumulative_percentage_of_explained_variance="#.##"))
+print(m1,'chart')
+```
+
+```{r}
+eigenvalues  <- Variance_Explained_Table[,2]
+```
+
+```{r}
+df           <- cbind(as.data.frame(eigenvalues), c(1:length(eigenvalues)), rep(1, length(eigenvalues)))
+colnames(df) <- c("eigenvalues", "components", "abline")
+Line         <- gvisLineChart(as.data.frame(df), xvar="components", yvar=c("eigenvalues","abline"), options=list(title='Scree plot', legend="right", width=900, height=600, hAxis="{title:'Number of Components', titleTextStyle:{color:'black'}}", vAxes="[{title:'Eigenvalues'}]",  series="[{color:'green',pointSize:3, targetAxisIndex: 0}]"))
+print(Line, 'chart')
+```
 <br>
-<br>
-<br>
+5. Bear market performance is described by fewer components, suggesting that overall returns are more highly correllated among assets. This highlights the importance of having a diversified portfolio in a downturn.
 
 
 <hr>
@@ -586,7 +629,9 @@ How does this simple strategy compare with **existing CTA products** such as [th
 
 **Your Answers here:**
 <br>
+1. Not in any more detail than the above explanation in the exercise
 <br>
+2. It leads to different cumulative returns.
 <br>
 <br>
 
